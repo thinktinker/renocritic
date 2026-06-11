@@ -48,4 +48,9 @@ public class RestrictedController {
         return new ResponseEntity<>( quoteService.saveAll(QuoteDTOS), HttpStatus.OK);
     }
 
+    @GetMapping("/finduserquotes")
+    public ResponseEntity<Object> findUserQuotes() throws ResourceNotFoundException{
+        return new ResponseEntity<>(quoteService.findUserQuotes(), HttpStatus.OK);
+    }
+
 }

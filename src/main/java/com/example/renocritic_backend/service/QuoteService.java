@@ -57,4 +57,31 @@ public class QuoteService {
         return quoteRepository.saveAll(savedQuotes);
     }
 
+    public List<QuoteDTO> findUserQuotes() throws ResourceNotFoundException {
+
+        // the bearer token is passed in and used by authentication
+        // to extract the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(()->new ResourceNotFoundException("User not found."));
+
+        List<QuoteDTO> quoteDTOS = new ArrayList<>();
+        List<Quote> foundUserQuotes = quoteRepository.findByUserId(user.getId());
+
+        foundUserQuotes.forEach(quote -> {
+            QuoteDTO quoteDTO = QuoteDTO.builder()
+                    .submission_id(quote.getSubmission_id())
+                    .work_description(quote.getWork_description())
+                    .quantity(quote.getQuantity())
+                    .unit_rate(quote.getUnitRate())
+                    .price(quote.getPrice())
+                    .verdict(quote.getVerdict())
+                    .build();
+
+            quoteDTOS.add(quoteDTO);
+        });
+
+        return quoteDTOS;
+
+    }
 }

@@ -9,4 +9,8 @@ import java.util.Optional;
 
 public interface QuoteRepository extends JpaRepository <Quote, Integer> {
 
+    // Derived Query:
+    List<Quote> findByUserId(Integer id);
+
 }
+
